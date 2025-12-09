@@ -11,8 +11,13 @@
         <div class="header-content">
             <div>
                 <h1>My Daily Dashboard</h1>
-                <p class="dashboard-subtitle">Welcome back! Here's your day at a glance.</p>
+                <p class="dashboard-subtitle">
+                    <p id="welcome-message"></p>
+                    <p> Here is your day at a glance</p>
+                    <button id="change-name-btn">Change Name</button>
+                </p>
             </div>
+
             <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                 <span class="theme-icon">🌙</span>
             </button>
@@ -30,13 +35,44 @@
                 </div>
             </section>
 
-            <section class="widget quotes-widget">
-                <h2>Daily Inspiration</h2>
-                <div id="quotes-display">
-                    <!-- Quote will appear here -->
-                </div>
-                <button id="new-quote-btn" class="btn-primary">New Quote</button>
-            </section>
+            <div class="widget widget-column widget-column-small">
+                <section class="widget quotes-widget">
+                    <h2>Daily Inspiration</h2>
+                    <div id="quotes-display">
+                        <!-- Quote will appear here -->
+                    </div>
+                    <button id="new-quote-btn" class="btn-primary">New Quote</button>
+                </section>
+
+                <!-- Mini Game Widget -->
+                <section class="widget game-widget">
+                    <h2>Quick Game Break</h2>
+                    <div class="game-container game-container-with-overlay">
+                        <div class="game-inner">
+                            <div class="game-board-wrapper">
+                                <div id="block-game-grid" class="block-game-grid" aria-label="Block blast style mini game"></div>
+                            </div>
+                            <div class="game-controls">
+                                <button id="block-game-new-row" class="btn-primary">Drop Row</button>
+                                <div class="game-scores-row">
+                                    <div class="game-score-box">
+                                        <span class="game-score-label">Score</span>
+                                        <span class="game-score-value" id="game-score-display">0</span>
+                                    </div>
+                                    <div class="game-score-box best-score">
+                                        <span class="game-score-label">Best</span>
+                                        <span class="game-score-value" id="game-highscore-display">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="game-hint">Tap groups of 2+ matching blocks before the grid fills up!</p>
+                        </div>
+                        <div id="block-game-over" class="game-over-overlay" hidden>
+                            <button id="block-game-replay" class="game-replay-btn">Replay</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
 
             <div class="widget tasks-widget">
                 <h2>My Tasks</h2>
@@ -48,8 +84,27 @@
                     placeholder="Add a new task..."
                     required
                 />
+
+                <select id="task-category">
+                    <option value="work">Work</option>
+                    <option value="personal">Personal</option>
+                    <option value="study">Study</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <input type="date" id="task-date">
+
                 <button type="submit" class="btn-primary">Add Task</button>
                 </form>
+
+                <div class="category-filters">
+                    <button data-filter="all">All</button>
+                    <button data-filter="work">Work</button>
+                    <button data-filter="personal">Personal</button>
+                    <button data-filter="study">Study</button>
+                    <button data-filter="other">Other</button>
+                </div>
+
 
                 <!-- Task Statistics -->
                 <div id="task-stats" class="task-stats">
@@ -60,6 +115,8 @@
                 <div id="tasks-list" class="tasks-list">
                     <!-- Tasks will appear here -->
                 </div>
+
+            
             </div>
         </main>
     </div>

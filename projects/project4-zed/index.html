@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Tracker | Never Miss a Deadline</title>
+    <meta name="description" content="Track your homework assignments with automatic syllabus parsing">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">📚 Assignment Tracker</h1>
+                <nav class="nav">
+                    <button class="btn btn-secondary" id="colorPicker" aria-label="Choose color theme">
+                        🎨
+                    </button>
+                    <button class="btn btn-secondary" id="themeToggle" aria-label="Toggle theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-card">
+                    <h2>Upload Syllabus</h2>
+                    <p class="upload-description">Upload a syllabus file (.txt) and we'll automatically extract assignments</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📄</div>
+                        <p class="upload-text">Drag & drop your syllabus here</p>
+                        <p class="upload-subtext">or</p>
+                        <label for="fileInput" class="btn btn-primary">Choose File</label>
+                        <input type="file" id="fileInput" accept=".txt,.doc,.docx" hidden>
+                    </div>
+                    
+                    <div class="upload-status" id="uploadStatus"></div>
+                </div>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <!-- Manual Entry Form -->
+                <div class="add-assignment-card">
+                    <h2>Add Assignment Manually</h2>
+                    <form id="assignmentForm" class="assignment-form">
+                        <div class="form-group">
+                            <label for="assignmentName">Assignment Name*</label>
+                            <input type="text" id="assignmentName" required placeholder="e.g., Essay on Climate Change">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="courseName">Course*</label>
+                                <select id="courseName" required>
+                                    <option value="">Select a course...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dueDate">Due Date*</label>
+                                <input type="date" id="dueDate" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes">Notes (optional)</label>
+                            <textarea id="notes" rows="3" placeholder="Additional details or requirements..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Add Assignment</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="stats-section" id="statsSection">
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total</p>
+                        <p class="stat-value" id="totalCount">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Pending</p>
+                        <p class="stat-value" id="pendingCount">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Completed</p>
+                        <p class="stat-value" id="completedCount">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🚨</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Overdue</p>
+                        <p class="stat-value" id="overdueCount">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filter Section -->
+            <section class="filter-section">
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label for="filterStatus">Filter by Status:</label>
+                        <select id="filterStatus" class="filter-select">
+                            <option value="all">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="overdue">Overdue</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterCourse">Filter by Course:</label>
+                        <select id="filterCourse" class="filter-select">
+                            <option value="all">All Courses</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sortBy">Sort by:</label>
+                        <select id="sortBy" class="filter-select">
+                            <option value="dueDate">Due Date</option>
+                            <option value="course">Course</option>
+                            <option value="name">Name</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-secondary" id="manageCourses">Manage Courses</button>
+                    <button class="btn btn-secondary" id="clearAll">Clear All</button>
+                </div>
+            </section>
+
+            <!-- Assignments List -->
+            <section class="assignments-section">
+                <div class="section-header">
+                    <h2 class="section-title">Your Assignments</h2>
+                    <div id="courseLegend" class="course-legend"></div>
+                </div>
+                <div id="assignmentsList" class="assignments-list">
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <h3>No assignments yet</h3>
+                        <p>Upload a syllabus or add an assignment manually to get started</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Assignment Tracker | Built with AI Collaboration</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="alert"></div>
+
+    <!-- Color Picker Modal -->
+    <div id="colorPickerModal" class="modal" role="dialog" aria-labelledby="colorPickerTitle" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="colorPickerTitle">Choose Your Color Theme 🎨</h2>
+                <button class="modal-close" id="colorPickerClose" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="color-picker-content">
+                <p>Select a color scheme for your assignment tracker:</p>
+                
+                <div class="color-options">
+                    <button class="color-option" data-color="purple" aria-label="Purple theme">
+                        <div class="color-preview purple-preview"></div>
+                        <span>Purple</span>
+                    </button>
+                    
+                    <button class="color-option" data-color="blue" aria-label="Blue theme">
+                        <div class="color-preview blue-preview"></div>
+                        <span>Blue</span>
+                    </button>
+                    
+                    <button class="color-option" data-color="green" aria-label="Green theme">
+                        <div class="color-preview green-preview"></div>
+                        <span>Green</span>
+                    </button>
+                    
+                    <button class="color-option" data-color="pink" aria-label="Pink theme">
+                        <div class="color-preview pink-preview"></div>
+                        <span>Pink</span>
+                    </button>
+                    
+                    <button class="color-option" data-color="orange" aria-label="Orange theme">
+                        <div class="color-preview orange-preview"></div>
+                        <span>Orange</span>
+                    </button>
+                    
+                    <button class="color-option" data-color="red" aria-label="Red theme">
+                        <div class="color-preview red-preview"></div>
+                        <span>Red</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Modal -->
+    <div id="welcomeModal" class="modal" role="dialog" aria-labelledby="welcomeTitle" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="welcomeTitle">Welcome to Assignment Tracker! 📚</h2>
+            </div>
+            <div class="welcome-content">
+                <p>Let's start by adding your courses. You can always manage these later.</p>
+                
+                <div class="form-group">
+                    <label for="courseInput">Add Courses (one at a time)</label>
+                    <div class="course-input-group">
+                        <input type="text" id="courseInput" placeholder="e.g., COMM 221" />
+                        <button type="button" class="btn btn-primary" id="addCourseBtn">Add</button>
+                    </div>
+                </div>
+                
+                <div id="coursesList" class="courses-list"></div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-primary btn-block" id="finishSetup">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Courses Modal -->
+    <div id="manageCoursesModal" class="modal" role="dialog" aria-labelledby="manageCoursesTitle" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="manageCoursesTitle">Manage Courses</h2>
+                <button class="modal-close" id="manageCoursesClose" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="manage-courses-content">
+                <div class="form-group">
+                    <label for="manageCourseInput">Add New Course</label>
+                    <div class="course-input-group">
+                        <input type="text" id="manageCourseInput" placeholder="e.g., COMM 221" />
+                        <button type="button" class="btn btn-primary" id="addManageCourseBtn">Add</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Your Courses</label>
+                    <div id="manageCoursesListContainer" class="manage-courses-list"></div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="closeManageCourses">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Edit Assignment</h2>
+                <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="editForm" class="assignment-form">
+                <input type="hidden" id="editId">
+                
+                <div class="form-group">
+                    <label for="editName">Assignment Name*</label>
+                    <input type="text" id="editName" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editCourse">Course*</label>
+                        <select id="editCourse" required>
+                            <option value="">Select a course...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDueDate">Due Date*</label>
+                        <input type="date" id="editDueDate" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editNotes">Notes</label>
+                    <textarea id="editNotes" rows="3"></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelEdit">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

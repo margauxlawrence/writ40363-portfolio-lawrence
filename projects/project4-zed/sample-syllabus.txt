@@ -1,0 +1,48 @@
+COMM 221 - Web Development
+Fall 2025 Syllabus
+
+Course Schedule and Assignments:
+
+Week 1 - Introduction to HTML
+- Reading Assignment - Due: January 15, 2025
+- Quiz 1: HTML Basics - Due 1/17/2025
+
+Week 2 - CSS Fundamentals  
+- Project 1: Personal Portfolio - Due January 29, 2025
+- CSS Exercise - January 24
+
+Week 3 - JavaScript Basics
+- Homework: Variables and Functions - Due: 2/5/2025
+- Lab Assignment - Feb 7
+
+Week 4 - DOM Manipulation
+- Assignment 4: Interactive Quiz - Due February 14, 2025
+- Discussion Post - 2/12/2025
+
+Week 5 - Midterm
+- Midterm Exam - Due: February 21, 2025
+
+Week 6 - APIs and Fetch
+- Project 2: Weather App - March 7, 2025
+- API Exercise - Due 3/5/2025
+
+Week 7 - Advanced JavaScript
+- Homework: Async Programming - March 14
+- Code Review Assignment - Due: 3/16/2025
+
+Week 8 - Responsive Design
+- Lab: Mobile-First Design - Due March 21, 2025
+
+Week 9 - Project Work
+- Project 3: Full Stack App - April 4, 2025
+- Peer Review - 4/2/2025
+
+Week 10 - Final Project
+- Final Project Proposal - Due: April 11, 2025
+- Project Zed Presentation - Due April 25, 2025
+- Final Exam - April 30, 2025
+
+Important Notes:
+- All assignments due by 11:59 PM on the specified date
+- Late submissions accepted within 24 hours with 10% penalty
+- No submissions accepted after 24 hours without prior arrangement

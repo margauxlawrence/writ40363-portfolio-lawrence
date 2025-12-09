@@ -53,74 +53,173 @@ function setupThemeToggle() {
 initializeTheme();
 setupThemeToggle();
 
+// -----------------------------
+// WELCOME MESSAGE FEATURE
+// -----------------------------
+
+function loadUserName() {
+  let name = localStorage.getItem("userName");
+
+  // If no name stored, ask the user
+  if (!name) {
+    name = prompt("Welcome! What is your name?");
+    if (name && name.trim() !== "") {
+      localStorage.setItem("userName", name.trim());
+    } else {
+      name = "Guest"; // fallback
+    }
+  }
+
+  updateWelcomeMessage(name);
+}
+
+function updateWelcomeMessage(name) {
+  const welcomeEl = document.getElementById("welcome-message");
+  if (welcomeEl) {
+    welcomeEl.textContent = `Welcome back, ${name}!`;
+  }
+}
+
+const changeNameBtn = document.getElementById("change-name-btn");
+if (changeNameBtn) {
+  changeNameBtn.addEventListener("click", () => {
+    const newName = prompt("Enter your name:");
+
+    if (newName && newName.trim() !== "") {
+      localStorage.setItem("userName", newName.trim());
+      updateWelcomeMessage(newName.trim());
+    }
+  });
+}
+
+// Run on page load
+loadUserName();
+
+// ========================================
+// WEATHER WIDGET (with 3-day forecast)
+// ========================================
+
 // Function to load weather data
 function loadWeather() {
-    console.log('🌤️ Loading weather data...');
+  console.log('🌤️ Loading weather data...');
 
-    fetch('./data/weather.json')
-        .then(response => {
-            console.log('✅ Got response:', response);
-            return response.json();
-        })
-        .then(data => {
-            console.log('✅ Weather data loaded:', data);
-            displayWeather(data);
-        })
-        .catch(error => {
-            console.error('❌ Error loading weather:', error);
-            displayWeatherError();
-        });
+  fetch('./data/weather.json')
+    .then(response => {
+      console.log('✅ Got response:', response);
+      return response.json();
+    })
+    .then(data => {
+      console.log('✅ Weather data loaded:', data);
+      displayWeather(data);  // receives full object with current + forecast
+    })
+    .catch(error => {
+      console.error('❌ Error loading weather:', error);
+      displayWeatherError();
+    });
 }
 
 // Function to display weather data in the DOM
-function displayWeather(weather) {
-    console.log('📊 Displaying weather data...');
+function displayWeather(weatherData) {
+  console.log('📊 Displaying weather data...');
 
-    const weatherDisplay = document.getElementById('weather-display');
+  const weatherDisplay = document.getElementById('weather-display');
+  if (!weatherDisplay) return;
 
-    weatherDisplay.innerHTML = `
-        <div class="weather-current">
-            <div class="weather-icon">${weather.icon}</div>
-            <div class="weather-temp">${weather.temperature}°F</div>
-            <div class="weather-location">${weather.location}</div>
-            <div class="weather-condition">${weather.condition}</div>
+  // Clear container and rebuild structure
+  weatherDisplay.innerHTML = `
+    <div id="weather-current"></div>
+    <div id="weather-forecast"></div>
+  `;
+
+  // Render current + 3-day forecast
+  renderCurrentWeather(weatherData.current);
+  renderForecast(weatherData.forecast);
+
+  console.log('✅ Weather displayed successfully!');
+}
+
+// Render current weather
+function renderCurrentWeather(current) {
+  const currentEl = document.getElementById('weather-current');
+  if (!currentEl) return;
+
+  currentEl.innerHTML = `
+    <div class="weather-current">
+      <div class="weather-icon">${current.icon}</div>
+      <div class="weather-temp">${current.temperature}°F</div>
+      <div class="weather-location">${current.location}</div>
+      <div class="weather-condition">${current.condition}</div>
+    </div>
+
+    <div class="weather-details">
+      <div class="weather-detail">
+        <span>💧 Humidity</span>
+        <strong>${current.humidity}%</strong>
+      </div>
+      <div class="weather-detail">
+        <span>💨 Wind Speed</span>
+        <strong>${current.wind} mph</strong>
+      </div>
+      <div class="weather-detail">
+        <span>🌡️ Feels Like</span>
+        <strong>${current.feelsLike}°F</strong>
+      </div>
+    </div>
+  `;
+}
+
+// Render 3-Day Forecast
+function renderForecast(forecastArray) {
+  const forecastEl = document.getElementById('weather-forecast');
+  if (!forecastEl) return;
+
+  if (!forecastArray || forecastArray.length === 0) {
+    forecastEl.innerHTML = "<p>No forecast data available.</p>";
+    return;
+  }
+
+  const forecastHTML = forecastArray
+    .map(day => {
+      return `
+        <div class="forecast-day">
+          <div class="forecast-icon">${day.icon}</div>
+          <div class="forecast-day-name">${day.day}</div>
+          <div class="forecast-condition">${day.condition}</div>
+          <div class="forecast-temps">
+            High: ${day.high}° · Low: ${day.low}°
+          </div>
         </div>
-        <div class="weather-details">
-            <div class="weather-detail">
-                <span>💧 Humidity</span>
-                <strong>${weather.humidity}%</strong>
-            </div>
-            <div class="weather-detail">
-                <span>💨 Wind Speed</span>
-                <strong>${weather.windSpeed} mph</strong>
-            </div>
-            <div class="weather-detail">
-                <span>🌡️ Feels Like</span>
-                <strong>${weather.feelsLike}°F</strong>
-            </div>
-        </div>
+      `;
+    })
+    .join("");
 
-
-    `;
-
-    console.log('✅ Weather displayed successfully!');
+  forecastEl.innerHTML = `
+    <div class="weather-forecast">
+      ${forecastHTML}
+    </div>
+  `;
 }
 
 // Function to show error message if weather data fails to load
 function displayWeatherError() {
-    const weatherDisplay = document.getElementById('weather-display');
+  const weatherDisplay = document.getElementById('weather-display');
+  if (!weatherDisplay) return;
 
-    weatherDisplay.innerHTML = `
-        <div class="error-message">
-            <div class="error-icon">⚠️</div>
-            <p>Could not load weather data</p>
-            <p class="error-hint">Check console for details</p>
-        </div>
-    `;
+  weatherDisplay.innerHTML = `
+    <div class="error-message">
+      <div class="error-icon">⚠️</div>
+      <p>Could not load weather data</p>
+      <p class="error-hint">Check console for details</p>
+    </div>
+  `;
 }
 
 // Load weather data when page loads
 loadWeather();
+
+// ========================================
+// QUOTES WIDGET
+// ========================================
 
 // Global variable to store all quotes
 let allQuotes = [];
@@ -165,6 +264,8 @@ function displayRandomQuote() {
 
   // Display the quote
   const quotesDisplay = document.getElementById('quotes-display');
+  if (!quotesDisplay) return;
+
   quotesDisplay.innerHTML = `
     <div class="quote-card">
       <div class="quote-text">"${quote.text}"</div>
@@ -178,6 +279,8 @@ function displayRandomQuote() {
 // Function to show error message
 function displayQuotesError() {
   const quotesDisplay = document.getElementById('quotes-display');
+  if (!quotesDisplay) return;
+
   quotesDisplay.innerHTML = `
     <div class="error-message">
       ⚠️ Could not load quotes
@@ -191,6 +294,7 @@ loadQuotes();
 // Set up "New Quote" button
 function setupQuotesButton() {
   const newQuoteBtn = document.getElementById('new-quote-btn');
+  if (!newQuoteBtn) return;
 
   newQuoteBtn.addEventListener('click', () => {
     console.log('New quote button clicked!');
@@ -202,8 +306,206 @@ function setupQuotesButton() {
 setupQuotesButton();
 
 // ========================================
-// TASKS WIDGET (from LAB18)
+// MINI GAME WIDGET (Block Blast style)
 // ========================================
+
+function initBlockGame() {
+  const gridEl = document.getElementById('block-game-grid');
+  const newRowBtn = document.getElementById('block-game-new-row');
+  const scoreDisplay = document.getElementById('game-score-display');
+  const highScoreDisplay = document.getElementById('game-highscore-display');
+  const gameOverOverlay = document.getElementById('block-game-over');
+  const replayBtn = document.getElementById('block-game-replay');
+
+  if (!gridEl || !newRowBtn || !scoreDisplay || !highScoreDisplay || !gameOverOverlay || !replayBtn) return;
+
+  const cols = 8;
+  const rows = 10;
+  const colors = 5; // 0-4
+
+  let grid = [];
+  let score = 0;
+  let highScore = 0;
+  let gameOver = false;
+
+  // Load saved high score from localStorage
+  const savedHighScore = localStorage.getItem('blockGameHighScore');
+  if (savedHighScore) {
+    highScore = parseInt(savedHighScore, 10) || 0;
+  }
+
+  function updateScoreUI() {
+    scoreDisplay.textContent = String(score);
+  highScoreDisplay.textContent = String(highScore);
+  }
+
+  function resetGame() {
+    grid = Array.from({ length: rows }, () => Array(cols).fill(null));
+    score = 0;
+    gameOver = false;
+  gameOverOverlay.style.display = 'none';
+  updateScoreUI();
+    renderGrid();
+  }
+
+  function randomColor() {
+    return Math.floor(Math.random() * colors);
+  }
+
+  function addRow() {
+    if (gameOver) return;
+
+    // Check if adding a row would overflow
+    const topRowFilled = grid[0].some((cell) => cell !== null);
+    if (topRowFilled) {
+      handleGameOver();
+      return;
+    }
+
+    // Move everything up one row
+    for (let r = 0; r < rows - 1; r++) {
+      grid[r] = [...grid[r + 1]];
+    }
+
+    // New bottom row
+    grid[rows - 1] = Array.from({ length: cols }, () => randomColor());
+
+    renderGrid();
+  }
+
+  function renderGrid() {
+    gridEl.innerHTML = '';
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const color = grid[r][c];
+        const cell = document.createElement('div');
+        cell.classList.add('block-cell');
+
+        if (color === null) {
+          cell.classList.add('empty');
+        } else {
+          cell.classList.add(`color-${color}`);
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          cell.addEventListener('click', onCellClick);
+        }
+
+        const inner = document.createElement('div');
+        inner.classList.add('block-cell-inner');
+        cell.appendChild(inner);
+        gridEl.appendChild(cell);
+      }
+    }
+  }
+
+  function getGroup(row, col, color, visited) {
+    const key = `${row},${col}`;
+    if (
+      row < 0 ||
+      row >= rows ||
+      col < 0 ||
+      col >= cols ||
+      visited.has(key) ||
+      grid[row][col] !== color
+    ) {
+      return [];
+    }
+
+    visited.add(key);
+
+    let group = [[row, col]];
+    group = group.concat(getGroup(row - 1, col, color, visited));
+    group = group.concat(getGroup(row + 1, col, color, visited));
+    group = group.concat(getGroup(row, col - 1, color, visited));
+    group = group.concat(getGroup(row, col + 1, color, visited));
+
+    return group;
+  }
+
+  function onCellClick(e) {
+    if (gameOver) return;
+    const cell = e.currentTarget;
+    const row = parseInt(cell.dataset.row, 10);
+    const col = parseInt(cell.dataset.col, 10);
+    const color = grid[row][col];
+    if (color === null) return;
+
+    const group = getGroup(row, col, color, new Set());
+
+    // Only clear if group size >= 2 to make it more like block blast
+    if (group.length < 2) return;
+
+    // Clear blocks
+    group.forEach(([r, c]) => {
+      grid[r][c] = null;
+    });
+
+    // Apply gravity per column (blocks fall down)
+    for (let c = 0; c < cols; c++) {
+      const colValues = [];
+      for (let r = 0; r < rows; r++) {
+        if (grid[r][c] !== null) {
+          colValues.push(grid[r][c]);
+        }
+      }
+      const emptyCount = rows - colValues.length;
+      for (let r = 0; r < emptyCount; r++) {
+        grid[r][c] = null;
+      }
+      for (let r = 0; r < colValues.length; r++) {
+        grid[emptyCount + r][c] = colValues[r];
+      }
+    }
+
+    // Score: square of group size (encourages bigger groups)
+    score += group.length * group.length;
+
+    // Update high score if needed
+    if (score > highScore) {
+      highScore = score;
+      localStorage.setItem('blockGameHighScore', String(highScore));
+    }
+
+    updateScoreUI();
+
+    renderGrid();
+  }
+
+  function handleGameOver() {
+    gameOver = true;
+  // Show red overlay with replay button
+  gameOverOverlay.style.display = 'flex';
+  }
+
+  newRowBtn.addEventListener('click', () => {
+    if (gameOver) {
+      resetGame();
+    } else {
+      addRow();
+    }
+  });
+
+  replayBtn.addEventListener('click', () => {
+    resetGame();
+  });
+
+  // Initialize starting grid with a couple of rows so it's not empty
+  updateScoreUI();
+  resetGame();
+  addRow();
+  addRow();
+}
+
+// Initialize block game after DOM is ready
+window.addEventListener('load', initBlockGame);
+
+// ========================================
+// TASKS WIDGET (with categories + due dates + filters)
+// ========================================
+
+// Global filter state
+let currentCategoryFilter = 'all';
 
 // Function to load tasks from localStorage
 function loadTasks() {
@@ -222,67 +524,124 @@ function saveTasks(tasks) {
   console.log('Tasks saved:', tasks);
 }
 
-// Function to display all tasks
+// Function to display all tasks (respects currentCategoryFilter)
 function displayTasks() {
-  const tasks = loadTasks();
+  const allTasks = loadTasks();
   const tasksList = document.getElementById('tasks-list');
+  if (!tasksList) return;
 
-  // If no tasks, show message
-  if (tasks.length === 0) {
+  // If no tasks at all
+  if (allTasks.length === 0) {
     tasksList.innerHTML = `
       <div class="no-tasks">
         No tasks yet. Add one above! ✨
       </div>
     `;
-    updateTaskStats(tasks);
+    updateTaskStats(allTasks);
     return;
+  }
+
+  // Filter by category if needed
+  let tasksToRender = allTasks;
+  if (currentCategoryFilter !== 'all') {
+    tasksToRender = allTasks.filter(task => task.category === currentCategoryFilter);
+    console.log("Category filter:", currentCategoryFilter, "Tasks count:", tasksToRender.length);
   }
 
   // Clear existing tasks
   tasksList.innerHTML = '';
 
-  // Display each task
-  tasks.forEach((task, index) => {
+  const today = new Date();
+
+  // If filter applied and no matches
+  if (tasksToRender.length === 0) {
+    tasksList.innerHTML = `
+      <div class="no-tasks">
+        No tasks in this category yet.
+      </div>
+    `;
+    updateTaskStats(allTasks); // stats still based on all tasks
+    return;
+  }
+
+  // Display each task in tasksToRender
+  tasksToRender.forEach((task) => {
     const taskItem = document.createElement('div');
     taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+
+    // Overdue highlighting
+    if (task.dueDate && new Date(task.dueDate) < today && !task.completed) {
+      taskItem.classList.add('overdue');
+      console.log("Overdue task:", task.text);
+    }
 
     // Create checkbox
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = task.completed;
-    checkbox.addEventListener('change', () => toggleTask(index));
+
+    // Use ID to find correct index on toggle/delete
+    checkbox.addEventListener('change', () => toggleTaskById(task.id));
 
     // Create task text
     const taskText = document.createElement('span');
     taskText.className = 'task-text';
     taskText.textContent = task.text;
 
+    // Category badge
+    const categoryBadge = document.createElement('span');
+    categoryBadge.className = `task-category ${task.category}`;
+    categoryBadge.textContent = task.category || 'uncategorized';
+    console.log("Category:", task.category);
+
+    // Due date display
+    const dueDate = document.createElement('span');
+    dueDate.className = 'task-date';
+    dueDate.textContent = task.dueDate ? `Due: ${task.dueDate}` : 'No due date';
+    console.log("Due date:", task.dueDate);
+
+    // Meta container (NEW) for category + date
+    const meta = document.createElement('div');
+    meta.className = 'task-meta';
+    meta.appendChild(categoryBadge);
+    meta.appendChild(dueDate);
+
     // Create delete button
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'btn-delete';
     deleteBtn.textContent = 'Delete';
-    deleteBtn.addEventListener('click', () => deleteTask(index));
+    deleteBtn.addEventListener('click', () => deleteTaskById(task.id));
 
     // Append all elements to task item
     taskItem.appendChild(checkbox);
     taskItem.appendChild(taskText);
+    taskItem.appendChild(meta);
     taskItem.appendChild(deleteBtn);
 
     tasksList.appendChild(taskItem);
   });
 
-  updateTaskStats(tasks);
+  // Stats are based on ALL tasks, not just filtered
+  updateTaskStats(allTasks);
 }
 
 // Function to add a new task
 function addTask(taskText) {
   const tasks = loadTasks();
 
+  const categorySelect = document.getElementById('task-category');
+  const dateInput = document.getElementById('task-date');
+
   const newTask = {
     text: taskText,
     completed: false,
-    id: Date.now() // Unique ID using timestamp
+    id: Date.now(), // Unique ID using timestamp
+    category: categorySelect ? categorySelect.value : 'other',
+    dueDate: dateInput ? dateInput.value : ''
   };
+
+  console.log("Category:", newTask.category);
+  console.log("Due date:", newTask.dueDate);
 
   tasks.push(newTask);
   saveTasks(tasks);
@@ -295,6 +654,8 @@ function addTask(taskText) {
 function setupTaskForm() {
   const taskForm = document.getElementById('task-form');
   const taskInput = document.getElementById('task-input');
+
+  if (!taskForm || !taskInput) return;
 
   taskForm.addEventListener('submit', (e) => {
     e.preventDefault(); // Prevent page reload
@@ -309,9 +670,12 @@ function setupTaskForm() {
   });
 }
 
-// Function to toggle task complete/incomplete
-function toggleTask(index) {
+// Toggle task by ID (works with filtered view)
+function toggleTaskById(taskId) {
   const tasks = loadTasks();
+  const index = tasks.findIndex(task => task.id === taskId);
+  if (index === -1) return;
+
   tasks[index].completed = !tasks[index].completed;
   saveTasks(tasks);
   displayTasks();
@@ -319,12 +683,14 @@ function toggleTask(index) {
   console.log('Task toggled:', tasks[index]);
 }
 
-// Function to delete a task
-function deleteTask(index) {
+// Delete task by ID (works with filtered view)
+function deleteTaskById(taskId) {
   const tasks = loadTasks();
+  const index = tasks.findIndex(task => task.id === taskId);
+  if (index === -1) return;
+
   const taskToDelete = tasks[index];
 
-  // Optional: Confirm before deleting
   if (confirm(`Delete task: "${taskToDelete.text}"?`)) {
     tasks.splice(index, 1);
     saveTasks(tasks);
@@ -337,6 +703,7 @@ function deleteTask(index) {
 // Function to update task statistics
 function updateTaskStats(tasks) {
   const statsDiv = document.getElementById('task-stats');
+  if (!statsDiv) return;
 
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.completed).length;
@@ -357,7 +724,29 @@ function updateTaskStats(tasks) {
   `;
 }
 
-// Initialize tasks when page loads
+// Set up category filter buttons
+function setupCategoryFilters() {
+  const filterButtons = document.querySelectorAll('.category-filters button');
+  if (!filterButtons.length) return;
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filterValue = btn.dataset.filter || 'all';
+      currentCategoryFilter = filterValue;
+
+      console.log("Category filter set to:", currentCategoryFilter);
+
+      // Update active class
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Re-render tasks with new filter
+      displayTasks();
+    });
+  });
+}
+
+// Initialize tasks and filters when page loads
 displayTasks();
 setupTaskForm();
-
+setupCategoryFilters();
