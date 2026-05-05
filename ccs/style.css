@@ -48,6 +48,60 @@ nav{
   display: flex; gap: 2rem; 
 }
 
+.nav-dropdown{
+  position: relative;
+}
+
+.nav-dropdown summary{
+  list-style: none;
+  cursor: pointer;
+  color: var(--deep-purple);
+  font-weight: 600;
+}
+
+.nav-dropdown summary::-webkit-details-marker{
+  display: none;
+}
+
+.nav-dropdown summary::after{
+  content: "▾";
+  margin-left: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.nav-dropdown[open] summary::after{
+  content: "▴";
+}
+
+.nav-dropdown-menu{
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: 0;
+  min-width: 240px;
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-radius: 14px;
+  background: var(--white);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+  z-index: 50;
+}
+
+.nav-dropdown-menu a{
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+}
+
+.nav-dropdown-menu a:hover,
+.nav-dropdown-menu a:focus{
+  background: rgba(199,184,234,0.18);
+}
+
+.nav-dropdown[open] .nav-dropdown-menu{
+  display: grid;
+}
+
 nav a, .nav-links a{
   text-decoration: none;
   color: var(--deep-purple);
@@ -274,6 +328,74 @@ p{
   margin-top: 0.75rem;
 }
 
+.projects-hero{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 2rem 0;
+}
+
+.projects-hero-content{
+  padding: 2.5rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(233,244,236,0.95));
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.projects-kicker{
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--deep-purple);
+  margin-bottom: 0.75rem;
+}
+
+.projects-page-main{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+  display: grid;
+  gap: 3rem;
+}
+
+.projects-category-section{
+  padding: 0;
+}
+
+.projects-category-section h2{
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.projects-category-section h2::after{
+  margin-left: 0;
+}
+
+.projects-grid{
+  display: grid;
+  gap: 1.5rem;
+}
+
+.projects-grid-compact{
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px){
+  .projects-grid-compact{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .projects-grid-compact .project-card:first-child{
+    grid-column: 1 / -1;
+  }
+}
+
+.projects-page .project-card{
+  height: 100%;
+}
+
 .projects-container{
   display: grid; 
   grid-template-columns: 1fr; 
@@ -319,6 +441,10 @@ p{
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.projects-page .project-media{
+  margin-top: 1rem;
 }
 
 .project-gallery-vertical {
