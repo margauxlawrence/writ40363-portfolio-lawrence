@@ -289,6 +289,73 @@ p{
   margin-bottom: 0.5rem; 
 }
 
+/* ========== Certifications (matching skill-card feel) ========== */
+.certifications-container{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px){
+  .certifications-container{ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+}
+
+.certification-card{
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.certification-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  border-color: var(--deep-purple);
+}
+
+.certification-media{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffffff 40%, rgba(199,184,234,0.2) 100%);
+  text-decoration: none;
+}
+
+.certification-media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.certification-media--pdf{
+  padding: 1rem;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.certification-preview-title{
+  font-weight: 700;
+  color: var(--deep-purple);
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.certification-content{
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.certification-content h3{
+  color: var(--deep-purple);
+  margin-bottom: 0.6rem;
+}
+
 /* ========== Projects (lavender border cards) ========== */
 .projects-toolbar{
   display: flex;
