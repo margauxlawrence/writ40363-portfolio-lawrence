@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Margaux Lawrence | Malik Diallo Gallery</title>
+    <link rel="stylesheet" href="ccs/style.css">
+    <link rel="icon" type="image/png" href="images/Favicon_Transparent.png">
+</head>
+<body class="projects-page malik-gallery-page">
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Margaux Lawrence</a>
+            <div class="nav-links">
+                <a href="index.html#about">About</a>
+                <a href="index.html#skills">Skills</a>
+                <a href="index.html#certifications">Certifications</a>
+                <details class="nav-dropdown">
+                    <summary>Projects</summary>
+                    <div class="nav-dropdown-menu">
+                        <a href="projects.html">Full Projects Page</a>
+                        <a href="projects.html#graphic-design">Graphic Design</a>
+                        <a href="projects.html#writing-research">Writing and Research</a>
+                        <a href="projects.html#social-media-content">Social Media and Content Creation</a>
+                        <a href="projects.html#web-development">Web Development</a>
+                    </div>
+                </details>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="projects-hero">
+        <div class="projects-hero-content">
+            <p class="projects-kicker">Campaign Gallery</p>
+            <h1>Malik Diallo Collection</h1>
+            <p>This gallery gathers the full Malik Diallo campaign work from the semester. The collection is split into Story Graphics and Post Graphics so the full set stays organized while still letting you browse every piece.</p>
+            <a class="btn btn-primary" href="projects.html#malik-diallo">Back to Projects</a>
+        </div>
+    </header>
+
+    <main class="projects-page-main malik-gallery-page-main">
+        <section class="projects-category-section" id="malik-story-graphics">
+            <h2>Story Graphics</h2>
+            <div class="malik-carousel" data-carousel="story">
+                <div class="malik-carousel-stage">
+                    <button class="malik-carousel-nav malik-carousel-prev" type="button" aria-label="Previous story graphic">‹</button>
+                    <button class="malik-carousel-nav malik-carousel-next" type="button" aria-label="Next story graphic">›</button>
+                    <button class="malik-carousel-slide" type="button" aria-label="Open selected story graphic larger">
+                        <img id="malik-story-current" alt="Selected story graphic" loading="lazy">
+                    </button>
+                    <div class="malik-carousel-counter" id="malik-story-counter"></div>
+                </div>
+                <div class="malik-carousel-thumbs" id="malik-story-thumbs"></div>
+            </div>
+        </section>
+
+        <section class="projects-category-section" id="malik-post-graphics">
+            <h2>Post Graphics</h2>
+            <div class="malik-carousel" data-carousel="post">
+                <div class="malik-carousel-stage">
+                    <button class="malik-carousel-nav malik-carousel-prev" type="button" aria-label="Previous post graphic">‹</button>
+                    <button class="malik-carousel-nav malik-carousel-next" type="button" aria-label="Next post graphic">›</button>
+                    <button class="malik-carousel-slide" type="button" aria-label="Open selected post graphic larger">
+                        <img id="malik-post-current" alt="Selected post graphic" loading="lazy">
+                    </button>
+                    <div class="malik-carousel-counter" id="malik-post-counter"></div>
+                </div>
+                <div class="malik-carousel-thumbs" id="malik-post-thumbs"></div>
+            </div>
+        </section>
+    </main>
+
+    <div id="lightbox" class="lightbox">
+        <span class="close" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" alt="Expanded Malik graphic preview">
+    </div>
+
+    <script>
+        function openLightbox(src) {
+            document.getElementById('lightbox').style.display = 'flex';
+            document.getElementById('lightbox-img').src = src;
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.getElementById('lightbox-img').removeAttribute('src');
+        }
+
+        document.getElementById('lightbox').addEventListener('click', function (event) {
+            if (event.target === this) {
+                closeLightbox();
+            }
+        });
+
+        function buildThumb(src, label, isActive = false) {
+            return `
+                <button class="thumb malik-gallery-thumb${isActive ? ' is-active' : ''}" type="button" aria-label="Show ${label}" data-src="${src}" data-label="${label}">
+                    <img src="${src}" alt="${label}" loading="lazy">
+                </button>
+            `;
+        }
+
+        function renderCarousel(carouselType, items) {
+            const currentImage = document.getElementById(`malik-${carouselType}-current`);
+            const counter = document.getElementById(`malik-${carouselType}-counter`);
+            const thumbs = document.getElementById(`malik-${carouselType}-thumbs`);
+            const stage = document.querySelector(`.malik-carousel[data-carousel="${carouselType}"]`);
+            const prevButton = stage.querySelector('.malik-carousel-prev');
+            const nextButton = stage.querySelector('.malik-carousel-next');
+            const slideButton = stage.querySelector('.malik-carousel-slide');
+            let activeIndex = 0;
+
+            const setActive = (index) => {
+                activeIndex = (index + items.length) % items.length;
+                const item = items[activeIndex];
+                currentImage.src = item.src;
+                currentImage.alt = item.label;
+                slideButton.setAttribute('aria-label', `Open ${item.label} larger`);
+                slideButton.onclick = () => openLightbox(item.src);
+                counter.textContent = `${activeIndex + 1} of ${items.length}`;
+                thumbs.querySelectorAll('.malik-gallery-thumb').forEach((thumb, thumbIndex) => {
+                    thumb.classList.toggle('is-active', thumbIndex === activeIndex);
+                });
+            };
+
+            thumbs.innerHTML = items.map((item, index) => buildThumb(item.src, item.label, index === 0)).join('');
+
+            thumbs.addEventListener('click', (event) => {
+                const thumb = event.target.closest('.malik-gallery-thumb');
+                if (!thumb) {
+                    return;
+                }
+                const index = Array.from(thumbs.querySelectorAll('.malik-gallery-thumb')).indexOf(thumb);
+                setActive(index);
+            });
+
+            prevButton.addEventListener('click', () => setActive(activeIndex - 1));
+            nextButton.addEventListener('click', () => setActive(activeIndex + 1));
+
+            slideButton.addEventListener('click', () => openLightbox(items[activeIndex].src));
+
+            setActive(0);
+        }
+
+        function renderMalikGallery() {
+            const storyGraphics = Array.from({ length: 38 }, (_, index) => {
+                const number = index + 1;
+                return {
+                    src: `images/Malik/Malik Story Graphics/${number}.png`,
+                    label: `Malik Story Graphic ${number}`,
+                };
+            });
+
+            const postGraphics = [
+                'Group 1.png',
+                'Group 1 (2).png',
+                'Group 1 (3).png',
+                'Group 1 (4).png',
+                'Group 1 (5).png',
+                'Group 1 (6).png',
+                'Group 2.png',
+                'Group 2 (2).png',
+                'Group 2 (3).png',
+                'Group 2 (4).png',
+                'Group 2 (5).png',
+                'Group 2 (6).png',
+                'Group 2 (7).png',
+                'Group 3.png',
+                'Group 3 (2).png',
+                'Group 3 (3).png',
+                'Group 3 (4).png',
+                'Group 3 (5).png',
+                'Group 4.png',
+                'Group 4 (2).png',
+                'Group 4 (3).png',
+                'Group 4 (4).png',
+                'Group 4 (5).png',
+                'Group 4 (6).png',
+            ].map((fileName) => ({
+                src: `images/Malik/Malik Post Graphics/${fileName}`,
+                label: `Malik Post Graphic ${fileName.replace('.png', '')}`,
+            }));
+
+            renderCarousel('story', storyGraphics);
+            renderCarousel('post', postGraphics);
+        }
+
+        renderMalikGallery();
+    </script>
+</body>
+</html>
