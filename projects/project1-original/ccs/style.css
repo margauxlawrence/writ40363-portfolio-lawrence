@@ -1,7 +1,7 @@
 :root {
   --lavender: #C7B8EA;     /* lavender accent */
   --deep-purple: #6B4FA3;  /* richer purple for text/nav */
-  --sage: #9DBF9E;         /* calming secondary accent */
+  --navy: #203864;         /* navy secondary accent */
   --beige-bg: #F9F8F6;     /* neutral background */
   --charcoal: #2E2E2E;     /* dark text */
   --white: #FFFFFF;
@@ -18,7 +18,7 @@ body{
   font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   color: var(--text-dark);
-  background: linear-gradient(90deg, #E9F4EC, #e7e1f4); 
+  background: linear-gradient(90deg, #f3effc, #dfe7f6); 
 }
 
 /* ========== Navigation (white bar card) ========== */
@@ -79,7 +79,7 @@ header{
   flex: 1; 
   padding: 2rem;
   border-radius: 12px;
-  border: 6px solid var(--lavender); /* lavender border */
+  border: 6px solid var(--navy); /* navy border */
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
@@ -140,7 +140,7 @@ section h2::after {
   width: 60px;                     
   height: 4px;
   margin: 0.75rem auto 0;   
-  background: linear-gradient(90deg, var(--lavender), var(--sage));
+  background: linear-gradient(90deg, var(--lavender), var(--navy));
   border-radius: 2px;
 }
 
@@ -155,6 +155,12 @@ h1{
   font-weight: 700; 
   margin-bottom: 1rem; 
   line-height: 1.2;
+}
+
+.header_text h1{
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  letter-spacing: 0.02em;
 }
 
 h2{
@@ -334,7 +340,7 @@ p{
 }
 
 .btn-primary:hover{ background: var(--lavender); box-shadow: 0 6px 14px rgba(0,0,0,0.12); transform: translateY(-1px); }
-.btn-primary:focus{ outline: 3px solid var(--sage); outline-offset: 2px; }
+.btn-primary:focus{ outline: 3px solid var(--navy); outline-offset: 2px; }
 .btn-primary:active{ transform: translateY(0); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
 
 /* ========== Footer widths to match ========== */
