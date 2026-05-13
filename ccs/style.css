@@ -472,6 +472,24 @@ p{
   grid-column: auto;
 }
 
+/* Ensure Social Media cards sit side-by-side and share height */
+@media (min-width: 900px){
+  .projects-category-section#social-media-content .projects-grid-compact .project-card:first-child{
+    grid-column: auto;
+  }
+
+  .projects-category-section#social-media-content .projects-grid-compact{
+    align-items: stretch;
+  }
+
+  .projects-category-section#social-media-content .projects-grid-compact .project-card{
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
 .projects-page .project-card{
   height: 100%;
 }
@@ -599,6 +617,15 @@ p{
 .btn-primary:focus{ outline: 3px solid var(--navy); outline-offset: 2px; }
 .btn-primary:active{ transform: translateY(0); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
 
+/* Button spacing inside project media blocks (handles multiple buttons) */
+.project-media .btn{
+  margin-top: 0.6rem;
+}
+
+.project-media .btn + .btn{
+  margin-left: 0.6rem;
+}
+
 /* ========== Footer widths to match ========== */
 footer{
   max-width: 1200px; 
@@ -643,6 +670,11 @@ footer{
 /* ========== Project media / thumbnails ========== */
 .project-media{ 
   margin-top: 1rem; 
+}
+
+/* Space between mood board and Instagram button in Special Olympics card */
+.projects-category-section#social-media-content .projects-grid-compact .project-card:first-child .project-media .btn{
+  margin-top: 0.6rem;
 }
 
 .malik-featured-grid{
