@@ -38,14 +38,14 @@ nav{
 }
 
 .logo{
-  font-size: 1.25rem;
+  font-size: 1.6rem;
   font-weight: bold;
   text-decoration: none;
   color: var(--deep-purple);
 }
 
 .nav-links{ 
-  display: flex; gap: 2rem; 
+  display: flex; gap: 2.5rem; 
 }
 
 .nav-dropdown{
@@ -106,6 +106,7 @@ nav a, .nav-links a{
   text-decoration: none;
   color: var(--deep-purple);
   font-weight: 600;
+  font-size: 1.12rem;
 }
 
 nav a:hover, .nav-links a:hover{ 
@@ -120,18 +121,18 @@ nav a:focus{
 header{
   display: flex; 
   align-items: center; 
-  gap: 2rem;
-  min-height: 60vh;
+  gap: 2.75rem;
+  min-height: 70vh;
   max-width: 1200px; 
   margin: 0 auto; 
-  padding: 2rem;
+  padding: 3rem;
 }
 
 .header_text{
   background-color: var(--white);
   color: var(--text-dark);
   flex: 1; 
-  padding: 2rem;
+  padding: 3rem;
   border-radius: 12px;
   border: 6px solid var(--lavender); /* lavender border */
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -139,7 +140,7 @@ header{
 
 .header_pic {
   flex: 1;
-  min-height: 300px;
+  min-height: 380px;
   background: var(--white);
   border-radius: 12px;
   border: 1px solid var(--surface-border);
@@ -152,8 +153,8 @@ header{
 }
 
 .header_pic img {
-  max-width: 88%;
-  max-height: 88%;
+  max-width: 95%;
+  max-height: 95%;
   object-fit: contain;
   border-radius: 12px;
 }
@@ -205,10 +206,10 @@ p + p{
 
 h1{
   color: var(--deep-purple);
-  font-size: 2.5rem; 
+  font-size: 3.75rem; 
   font-weight: 700; 
   margin-bottom: 1rem; 
-  line-height: 1.2;
+  line-height: 1.08;
 }
 
 h2{
@@ -470,9 +471,6 @@ p{
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .projects-grid-compact .project-card:first-child{
-    grid-column: 1 / -1;
-  }
 }
 
 .projects-category-section#writing-research .projects-grid-compact .project-card:first-child{
