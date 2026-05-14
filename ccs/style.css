@@ -328,12 +328,20 @@ p{
   background: var(--white);
   border: 1px solid var(--surface-border);
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 140px; /* keep cards visually even */
 }
 
 .skill-card h3{ 
   color: var(--deep-purple); 
   margin-bottom: 0.5rem; 
+  font-size: 1.05rem;
 }
+
+.skill-card p{ color: var(--text-muted); margin: 0; }
 
 /* ========== Certifications (matching skill-card feel) ========== */
 .certifications-container{
