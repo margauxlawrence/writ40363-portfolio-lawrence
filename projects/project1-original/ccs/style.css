@@ -140,7 +140,7 @@ section h2::after {
   width: 60px;                     
   height: 4px;
   margin: 0.75rem auto 0;   
-  background: linear-gradient(90deg, var(--lavender), var(--navy));
+  background: linear-gradient(90deg, var(--lavender) 10%, var(--navy) 100%);
   border-radius: 2px;
 }
 
