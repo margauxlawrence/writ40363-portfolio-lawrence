@@ -89,28 +89,33 @@ nav{
 
 .nav-dropdown-menu{
   position: absolute;
-    max-width: 920px;
-  left: 0;
-  min-width: 240px;
-  display: grid;
-  gap: 0.25rem;
-    max-height: 70vh;
-  border-radius: 14px;
+  top: calc(100% + 8px);
+  right: 0;
+  left: auto;
+  min-width: 220px;
+  max-width: min(90vw, 420px);
+  display: none;
+  gap: 0.5rem; /* more breathing room between items */
+  max-height: 70vh;
+  overflow: auto;
+  padding: 0.75rem 0.5rem; /* increased vertical padding inside dropdown only */
+  border-radius: 10px;
   background: var(--white);
   border: 1px solid var(--surface-border);
   box-shadow: 0 14px 30px rgba(0,0,0,0.12);
-  z-index: 50;
+  z-index: 999;
 }
 
-    .malik-gallery-page-main .malik-carousel-stage{ max-width: 880px; }
-    .malik-gallery-page-main .malik-carousel-stage img{ max-height: 66vh; }
-  padding: 0.65rem 0.75rem;
-  border-radius: 10px;
-}
-
-    .malik-gallery-page-main .malik-carousel-stage img{ max-height: 58vh; }
 .nav-dropdown-menu a:focus{
   background: rgba(199,184,234,0.18);
+}
+
+/* Space out links inside the dropdown without affecting other nav links */
+.nav-dropdown-menu a{
+  display: block;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  line-height: 1.35;
 }
 
 .nav-dropdown[open] .nav-dropdown-menu{
@@ -472,22 +477,25 @@ p{
 .projects-page-main{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 2rem 4rem;
+  /* match homepage main padding so section spacing behaves the same */
+  padding: 2.25rem 2rem 4rem;
   display: grid;
-  gap: 3rem;
+  gap: 4rem; /* increased to match homepage spacing */
 }
 
 .projects-category-section{
-  padding: 0;
+  /* keep section spacing consistent with the rest of the site */
+  padding: 2.25rem 0;
+  margin-bottom: 1rem;
 }
 
 .projects-category-section h2{
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem; /* increased to match homepage section spacing */
 }
 
 .projects-category-section h2::after{
-  margin: 0.75rem auto 0;
+  margin: 1rem auto 0;
 }
 
 .projects-grid{
