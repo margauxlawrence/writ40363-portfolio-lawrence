@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Margaux Lawrence | Malik Diallo Gallery</title>
+    <title>Margaux Lawrence | Fans Booklet</title>
     <link rel="stylesheet" href="ccs/style.css">
     <link rel="icon" type="image/png" href="images/Favicon_Transparent.png">
 </head>
@@ -32,48 +32,33 @@
 
     <header class="projects-hero">
         <div class="projects-hero-content">
-            <p class="projects-kicker">Campaign Gallery</p>
-            <h1>Malick Diallo Collection</h1>
-            <p>This gallery gathers the full Malick Diallo campaign work from the semester. The collection is split into Story Graphics and Post Graphics so the full set stays organized while still letting you browse every piece.</p>
-            <a class="btn btn-primary" href="projects.html#malik-diallo">Back to Projects</a>
+            <p class="projects-kicker">Publication</p>
+            <h1>Fans — Final Booklet</h1>
+            <p>This is our final Fans Vintage & Locker Room booklet — scroll through the pages below to see the work that my team and I were able to complete throughout the Spring 2026 semester as a part of the Roxo Agency.</p>
+            <a class="btn btn-primary" href="projects.html#graphic-design">Back to Projects</a>
         </div>
     </header>
 
     <main class="projects-page-main malik-gallery-page-main">
-        <section class="projects-category-section" id="malik-story-graphics">
-            <h2>Story Graphics</h2>
-            <div class="malik-carousel" data-carousel="story">
+        <section class="projects-category-section" id="fans-booklet">
+            <h2>Booklet Pages</h2>
+            <div class="malik-carousel" data-carousel="booklet">
                 <div class="malik-carousel-stage">
-                    <button class="malik-carousel-nav malik-carousel-prev" type="button" aria-label="Previous story graphic">‹</button>
-                    <button class="malik-carousel-nav malik-carousel-next" type="button" aria-label="Next story graphic">›</button>
-                    <button class="malik-carousel-slide" type="button" aria-label="Open selected story graphic larger">
-                        <img id="malik-story-current" alt="Selected story graphic" loading="lazy">
+                    <button class="malik-carousel-nav malik-carousel-prev" type="button" aria-label="Previous page">‹</button>
+                    <button class="malik-carousel-nav malik-carousel-next" type="button" aria-label="Next page">›</button>
+                    <button class="malik-carousel-slide" type="button" aria-label="Open selected page larger">
+                        <img id="malik-booklet-current" alt="Selected booklet page" loading="lazy">
                     </button>
-                    <div class="malik-carousel-counter" id="malik-story-counter"></div>
+                    <div class="malik-carousel-counter" id="malik-booklet-counter"></div>
                 </div>
-                <div class="malik-carousel-thumbs" id="malik-story-thumbs"></div>
-            </div>
-        </section>
-
-        <section class="projects-category-section" id="malik-post-graphics">
-            <h2>Post Graphics</h2>
-            <div class="malik-carousel" data-carousel="post">
-                <div class="malik-carousel-stage">
-                    <button class="malik-carousel-nav malik-carousel-prev" type="button" aria-label="Previous post graphic">‹</button>
-                    <button class="malik-carousel-nav malik-carousel-next" type="button" aria-label="Next post graphic">›</button>
-                    <button class="malik-carousel-slide" type="button" aria-label="Open selected post graphic larger">
-                        <img id="malik-post-current" alt="Selected post graphic" loading="lazy">
-                    </button>
-                    <div class="malik-carousel-counter" id="malik-post-counter"></div>
-                </div>
-                <div class="malik-carousel-thumbs" id="malik-post-thumbs"></div>
+                <div class="malik-carousel-thumbs" id="malik-booklet-thumbs"></div>
             </div>
         </section>
     </main>
 
     <div id="lightbox" class="lightbox">
         <span class="close" onclick="closeLightbox()">&times;</span>
-        <img class="lightbox-content" id="lightbox-img" alt="Expanded Malik graphic preview">
+        <img class="lightbox-content" id="lightbox-img" alt="Expanded booklet page">
     </div>
 
     <script>
@@ -128,9 +113,7 @@
 
             thumbs.addEventListener('click', (event) => {
                 const thumb = event.target.closest('.malik-gallery-thumb');
-                if (!thumb) {
-                    return;
-                }
+                if (!thumb) return;
                 const index = Array.from(thumbs.querySelectorAll('.malik-gallery-thumb')).indexOf(thumb);
                 setActive(index);
             });
@@ -143,50 +126,16 @@
             setActive(0);
         }
 
-        function renderMalikGallery() {
-            const storyGraphics = Array.from({ length: 38 }, (_, index) => {
-                const number = index + 1;
-                return {
-                    src: `images/Malik/Malik Story Graphics/${number}.png`,
-                    label: `Malik Story Graphic ${number}`,
-                };
-            });
-
-            const postGraphics = [
-                'Group 1.png',
-                'Group 1 (2).png',
-                'Group 1 (3).png',
-                'Group 1 (4).png',
-                'Group 1 (5).png',
-                'Group 1 (6).png',
-                'Group 2.png',
-                'Group 2 (2).png',
-                'Group 2 (3).png',
-                'Group 2 (4).png',
-                'Group 2 (5).png',
-                'Group 2 (6).png',
-                'Group 2 (7).png',
-                'Group 3.png',
-                'Group 3 (2).png',
-                'Group 3 (3).png',
-                'Group 3 (4).png',
-                'Group 3 (5).png',
-                'Group 4.png',
-                'Group 4 (2).png',
-                'Group 4 (3).png',
-                'Group 4 (4).png',
-                'Group 4 (5).png',
-                'Group 4 (6).png',
-            ].map((fileName) => ({
-                src: `images/Malik/Malik Post Graphics/${fileName}`,
-                label: `Malik Post Graphic ${fileName.replace('.png', '')}`,
+        function renderFansBooklet() {
+            const pages = Array.from({ length: 31 }, (_, i) => i + 1).map(n => ({
+                src: `images/Fans Booklet/${n}.png`,
+                label: `Page ${n}`,
             }));
 
-            renderCarousel('story', storyGraphics);
-            renderCarousel('post', postGraphics);
+            renderCarousel('booklet', pages);
         }
 
-        renderMalikGallery();
+        renderFansBooklet();
     </script>
 </body>
 </html>

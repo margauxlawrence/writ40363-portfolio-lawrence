@@ -10,6 +10,9 @@
   --surface-border: #E2E2DD;
 }
 
+/* Import a lively serif for headings */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
 *{ 
   box-sizing: border-box; margin: 0; padding: 0; 
 }
@@ -19,6 +22,12 @@ body{
   line-height: 1.6;
   color: var(--text-dark);
   background: linear-gradient(90deg, #f3effc, #dfe7f6); 
+}
+
+/* Use the serif font for all titles/headings to add a lively tone */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  letter-spacing: 0.01em;
 }
 
 /* ========== Navigation (white bar card) ========== */
@@ -42,6 +51,11 @@ nav{
   font-weight: bold;
   text-decoration: none;
   color: var(--deep-purple);
+}
+
+/* Make the site name use the same lively serif as headings */
+.logo{
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
 }
 
 .nav-links{ 
@@ -75,12 +89,12 @@ nav{
 
 .nav-dropdown-menu{
   position: absolute;
-  top: calc(100% + 0.75rem);
+    max-width: 920px;
   left: 0;
   min-width: 240px;
   display: grid;
   gap: 0.25rem;
-  padding: 0.75rem;
+    max-height: 70vh;
   border-radius: 14px;
   background: var(--white);
   border: 1px solid var(--surface-border);
@@ -88,12 +102,13 @@ nav{
   z-index: 50;
 }
 
-.nav-dropdown-menu a{
+    .malik-gallery-page-main .malik-carousel-stage{ max-width: 880px; }
+    .malik-gallery-page-main .malik-carousel-stage img{ max-height: 66vh; }
   padding: 0.65rem 0.75rem;
   border-radius: 10px;
 }
 
-.nav-dropdown-menu a:hover,
+    .malik-gallery-page-main .malik-carousel-stage img{ max-height: 58vh; }
 .nav-dropdown-menu a:focus{
   background: rgba(199,184,234,0.18);
 }
@@ -158,6 +173,22 @@ header{
   object-fit: contain;
   border-radius: 12px;
 }
+
+/* Match the header card styling for the About section text box */
+
+.about-text{
+  background-color: var(--white);
+  padding: 3rem;
+  border-radius: 12px;
+  border: 6px solid var(--lavender);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.about-text .about-paragraphs p{ line-height:1.6; margin-bottom:1rem; }
 
 /* ========== Layout containers ========== */
 main{
@@ -263,8 +294,10 @@ p{
   }
 
   .about-section.solo .about-text{
-    max-width: 1000px;
-    margin: 0 auto;
+    /* allow the about-text to span the content width and keep the header-like border */
+    width: 100%;
+    max-width: none;
+    margin: 0;
   }
 }
 
@@ -449,12 +482,12 @@ p{
 }
 
 .projects-category-section h2{
-  text-align: left;
+  text-align: center;
   margin-bottom: 1.5rem;
 }
 
 .projects-category-section h2::after{
-  margin-left: 0;
+  margin: 0.75rem auto 0;
 }
 
 .projects-grid{
@@ -832,6 +865,8 @@ footer{
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   aspect-ratio: 4 / 3;
   background: linear-gradient(135deg, #ffffff 40%, rgba(199,184,234,0.2) 100%);
+  max-width: 300px; /* match brochure thumb size */
+  justify-self: center; /* center within the project card */
 }
 
 .presentation-preview iframe{
@@ -840,6 +875,29 @@ footer{
   border: 0;
   pointer-events: none;
 }
+
+/* Make presentation previews behave like image thumbnails (magnify + hover) */
+.presentation-preview{
+  cursor: zoom-in;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.presentation-preview iframe{
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.presentation-preview:hover,
+.presentation-preview:focus{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.presentation-preview:hover iframe,
+.presentation-preview:focus iframe{
+  transform: scale(1.03);
+}
+
+/* presentation-preview uses the existing .presentation-preview-trigger for overlay text and click target; keep that to avoid duplicate text */
 
 .presentation-preview-trigger{
   all: unset;
@@ -867,6 +925,10 @@ footer{
 .presentation-preview-trigger:focus{
   outline: 3px solid var(--navy);
   outline-offset: -3px;
+}
+
+@media (max-width: 900px){
+  .presentation-preview{ max-width: 100%; justify-self: stretch; }
 }
 
 .project-gallery{
@@ -945,6 +1007,67 @@ footer{
   aspect-ratio: 4/3;
   cursor: pointer;
   transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* Ensure homepage (#projects) previews behave exactly like the Projects page previews */
+#projects .project-media .thumb,
+#projects .project-media .pdf-thumb,
+#projects .project-media .presentation-preview,
+#projects .project-media .malik-featured-thumb{
+  border-radius: 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--white);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  cursor: zoom-in;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+#projects .project-media .thumb img,
+#projects .project-media .malik-featured-thumb img,
+#projects .project-media .presentation-preview iframe{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+#projects .project-media .thumb:hover img,
+#projects .project-media .thumb:focus img{
+  transform: scale(1.03);
+}
+
+#projects .project-media .thumb:hover,
+#projects .project-media .thumb:focus{
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  outline: 2px solid var(--deep-purple);
+  outline-offset: 2px;
+}
+
+#projects .project-media .thumb::after{
+  content: "Click to enlarge";
+  position: absolute; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  padding: 0.4rem 0.6rem; 
+  text-align: center; 
+  font-size: 0.9rem; 
+  color: #fff;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none;
+}
+
+#projects .project-media .thumb::before{
+  content: "🔍"; 
+  position: absolute; 
+  top: 8px; 
+  right: 10px; 
+  font-size: 1.1rem;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); 
+  opacity: 0.9; 
+  pointer-events: none;
 }
 
 .pdf-thumb:hover {
